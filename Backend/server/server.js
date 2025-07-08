@@ -12,3 +12,13 @@ app.use(cors()); // Allow frontend (localhost:3000) to talk to backend (localhos
 const uploadFolder = path.join(__dirname, 'uploads');
 const fs = require('fs');
 if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder)
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadFolder); // Save files in /uploads
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + file.originalname;
+    cb(null, uniqueName);
+  }
+});
