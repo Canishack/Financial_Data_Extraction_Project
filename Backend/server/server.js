@@ -22,3 +22,19 @@ const storage = multer.diskStorage({
     cb(null, uniqueName);
   }
 });
+const upload = multer({ storage });
+
+
+app.post('/api/upload', upload.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+
+  res.json({
+    message: 'File uploaded successfully!',
+    filename: req.file.filename
+  });
+});
+
+
+app.listen(5000, () => {
+  console.log('Backend running on http://localhost:5000');
+});
