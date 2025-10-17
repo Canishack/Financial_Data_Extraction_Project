@@ -1,16 +1,27 @@
 {
-  "name": "financial-data-extraction-monorepo",
   "version": 2,
-  "workspaces": [
-    "Frontend",
-    "Backend"
+  "builds": [
+    {
+      "src": "Backend/index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "Frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
   ],
-  "scripts": {
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "dev:frontend": "cd Frontend && npm start",
-    "dev:backend": "cd Backend && npm run start"
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  }
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/Backend/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/Frontend/build/index.html"
+    }
+  ]
 }
+
