@@ -12,7 +12,7 @@ import {
 function App() {
   return (
     <Router>
-      <Navbar title="FINANCIAL DATA EXTRACTION..." />
+      <Navbar title="FIINANCIAL DATA EXTRACTION..." />
       <Routes>
         <Route path="/" element={<UploadFile />} />
         <Route path="/about" element={<About />} />
