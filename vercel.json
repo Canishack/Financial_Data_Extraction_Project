@@ -1,6 +1,6 @@
 {
   "name": "financial-data-extraction-monorepo",
-  "version": "1.0.0",
+  "version": 2,
   "private": true,
   "workspaces": [
     "Frontend",
