@@ -2,11 +2,11 @@
   "version": 2,
   "builds": [
     {
-      "src": "backend/index.js",
+      "src": "Backend/index.js",
       "use": "@vercel/node"
     },
     {
-      "src": "frontend/package.json",
+      "src": "Frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
         "distDir": "build"
@@ -16,11 +16,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/backend/index.js"
+      "destination": "/Backend/index.js"
     },
     {
       "source": "/(.*)",
-      "destination": "/frontend/build/index.html"
+      "destination": "/Frontend/build/index.html"
     }
   ]
 }
