@@ -6,8 +6,8 @@ const path = require('path');
 const uploadRoute = require('./routes/upload');
 const analysisRoute = require('./routes/analysis');
 
-// Vercel handles environment variables through its dashboard,
-// but this line is still useful for local development (`vercel dev`)
+// Load .env variables (for local development only)
+// On Vercel, these will come from the dashboard
 require('dotenv').config({ path: path.join(__dirname, 'key.env') });
 
 const app = express();
@@ -19,14 +19,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Mount your API routes.
-// The vercel.json rewrite rule forwards requests like '/api/upload' to this file,
-// so the Express app needs to handle the full '/api' path.
+// Prefix API routes
 app.use('/api', uploadRoute);
 app.use('/api', analysisRoute);
 
-// This is the crucial change for Vercel:
-// We use the standard Node.js module export.
-// Vercel uses this to serve your Express app as a serverless function.
-module.exports = app;
+// ✅ Health check route (optional but useful)
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'Backend running successfully' });
+});
 
+// ✅ Export the app for Vercel (no app.listen)
+module.exports = app;
