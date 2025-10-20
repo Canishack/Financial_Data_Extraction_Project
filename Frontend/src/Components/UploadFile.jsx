@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './UploadFile.css';
 
@@ -9,10 +9,6 @@ const UploadFile = () => {
   const [currentTextContent, setCurrentTextContent] = useState('');
   const [analysisResult, setAnalysisResult] = useState(null);
   const textEditorRef = useRef(null);
-
-  useEffect(() => {
-    setCurrentTextContent(currentTextContent);
-  }, [currentTextContent]);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -46,7 +42,8 @@ const UploadFile = () => {
         const formData = new FormData();
         formData.append('file', selectedFile);
 
-        const res = await axios.post('http://localhost:5000/api/upload', formData, {
+        // --- CHANGE 1: Switched to a relative URL ---
+        const res = await axios.post('/api/upload', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 
@@ -88,7 +85,8 @@ const UploadFile = () => {
     setAnalysisResult(null);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/analyze', {
+      // --- CHANGE 2: Switched to a relative URL ---
+      const res = await axios.post('/api/analyze', {
         articleText: currentTextContent,
       });
 
@@ -181,7 +179,7 @@ const UploadFile = () => {
               {Object.entries(analysisResult).map(([key, value]) => (
                 <div key={key} className="data-row">
                   <span className="data-label">{key}:</span>
-                  <span className="data-value">{value}</span>
+                  <span className="data-value">{String(value)}</span>
                 </div>
               ))}
             </div>
@@ -209,3 +207,4 @@ const UploadFile = () => {
 };
 
 export default UploadFile;
+
