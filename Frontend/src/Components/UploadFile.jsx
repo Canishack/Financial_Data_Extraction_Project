@@ -2,6 +2,10 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './UploadFile.css';
 
+
+const API_BASE =
+  process.env.REACT_APP_API_URL || '/api';
+
 const UploadFile = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [statusMessage, setStatusMessage] = useState('');
@@ -43,7 +47,7 @@ const UploadFile = () => {
         formData.append('file', selectedFile);
 
         // --- CHANGE 1: Switched to a relative URL ---
-        const res = await axios.post('/api/upload', formData, {
+        const res = await axios.post(`${API_BASE}/upload`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 
@@ -86,7 +90,8 @@ const UploadFile = () => {
 
     try {
       // --- CHANGE 2: Switched to a relative URL ---
-      const res = await axios.post('/api/analyze', {
+      const res = await axios.post(`${API_BASE}/analyze`, {
+
         articleText: currentTextContent,
       });
 
