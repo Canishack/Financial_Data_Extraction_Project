@@ -1,10 +1,17 @@
 {
-  "dependencies": {
-    "fs-extra": "^11.3.0",
-    "multer": "^2.0.2",
-    "pdf-parse": "^1.1.1",
-    "react-router-dom": "^7.7.0",
-    "tesseract.js": "^6.0.1",
-    "xlsx": "^0.18.5"
+  "name": "financial-data-extraction-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "Frontend",
+    "Backend"
+  ],
+  "scripts": {
+    "install:frontend": "cd Frontend && npm install",
+    "install:backend": "cd Backend && npm install",
+    "install:all": "npm run install:frontend && npm run install:backend",
+    "build:frontend": "cd Frontend && npm run build",
+    "start:backend": "cd Backend && npm start"
   }
 }
+
