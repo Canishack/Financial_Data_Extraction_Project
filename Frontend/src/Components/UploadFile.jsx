@@ -3,8 +3,7 @@ import axios from 'axios';
 import './UploadFile.css';
 
 
-const API_BASE =
-  process.env.REACT_APP_API_URL || '/api';
+const API_BASE ='/api';
 
 const UploadFile = () => {
   const [selectedFile, setSelectedFile] = useState(null);
