@@ -3,7 +3,9 @@ import axios from 'axios';
 import './UploadFile.css';
 
 
-const API_BASE ='/api';
+const API_BASE = process.env.NODE_ENV === "production"
+  ? "https://financial-data-extraction-project.vercel.app/"
+  : "http://localhost:5000/api" 
 
 const UploadFile = () => {
   const [selectedFile, setSelectedFile] = useState(null);
