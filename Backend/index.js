@@ -29,4 +29,11 @@ app.get('/api/health', (req, res) => {
 });
 
 // ✅ Export the app for Vercel (no app.listen)
+
+// Global error handler for debugging
+app.use((err, req, res, next) => {
+  console.error("Error:", err.stack);
+  res.status(500).json({ error: "Internal Server Error", details: err.message });
+});
+
 module.exports = app;
