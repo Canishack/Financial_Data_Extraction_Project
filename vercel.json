@@ -1,7 +1,30 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/Backend/index.js" },
-    { "source": "/(.*)", "destination": "/Frontend/$1" }
+  "builds": [
+    {
+      "src": "Backend/index.js",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["Backend/**"] }
+    },
+    {
+      "src": "Frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "installCommand": "npm run install:frontend",
+        "buildCommand": "npm run build:frontend",
+        "outputDirectory": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/Backend/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/build/index.html"
+    }
   ]
 }
+
