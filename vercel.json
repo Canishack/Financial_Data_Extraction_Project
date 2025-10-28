@@ -12,7 +12,7 @@
       "config": {
         "installCommand": "npm run install:frontend",
         "buildCommand": "npm run build:frontend",
-        "outputDirectory": "build"
+        "outputDirectory": "Frontend/build"
       }
     }
   ],
@@ -23,7 +23,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/build/index.html"
+      "dest": "/Frontend/build/index.html"
     }
   ]
 }
