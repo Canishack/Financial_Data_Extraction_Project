@@ -11,7 +11,8 @@
       "use": "@vercel/static-build",
       "config": {
         "installCommand": "npm run install:frontend",
-        "buildCommand": "npm run build:frontend",
+        "buildCommand": "npm run build:frontend --workspace Frontend"
+,
         "outputDirectory": "Frontend/build"
       }
     }
@@ -23,7 +24,8 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/Frontend/build/index.html"
+      "dest": "/Frontend/build/$1" 
+
     }
   ]
 }
