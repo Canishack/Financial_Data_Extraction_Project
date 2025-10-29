@@ -10,14 +10,21 @@
       "src": "Frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "installCommand": "npm install",
-        "buildCommand": "npm run build",
+        "installCommand": "npm run install:frontend",
+        "buildCommand": "npm run build:frontend",
         "outputDirectory": "Frontend/build"
       }
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/Backend/index.js" },
-    { "src": "/(.*)", "dest": "/Frontend/build/$1" }
+    {
+      "src": "/api/(.*)",
+      "dest": "/Backend/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/Frontend/build/index.html"
+    }
   ]
 }
+
