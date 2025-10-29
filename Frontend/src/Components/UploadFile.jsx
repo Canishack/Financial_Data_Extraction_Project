@@ -3,9 +3,8 @@ import axios from 'axios';
 import './UploadFile.css';
 
 
-const API_BASE = process.env.NODE_ENV === "production"
-  ? "https://financial-data-extraction-project.vercel.app/"
-  : "http://localhost:5000/api" 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
 
 const UploadFile = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -48,9 +47,10 @@ const UploadFile = () => {
         formData.append('file', selectedFile);
 
         // --- CHANGE 1: Switched to a relative URL ---
-        const res = await axios.post(`${API_BASE}/upload`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
+        const res = await axios.post(`${API_BASE}/api/upload`, formData, {
+  headers: { 'Content-Type': 'multipart/form-data' },
+});
+        
 
         console.log('Backend response (Upload + OCR):', res.data);
         if (res.data.extractedText) {
@@ -91,10 +91,10 @@ const UploadFile = () => {
 
     try {
       // --- CHANGE 2: Switched to a relative URL ---
-      const res = await axios.post(`${API_BASE}/analyze`, {
+      const res = await axios.post(`${API_BASE}/api/analyze`, {
+  articleText: currentTextContent,
+});
 
-        articleText: currentTextContent,
-      });
 
       console.log('LLM Analysis response:', res.data);
       setAnalysisResult(res.data);
