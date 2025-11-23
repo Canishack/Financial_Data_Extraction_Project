@@ -3,7 +3,9 @@ import axios from 'axios';
 import './UploadFile.css';
 
 
-const API_BASE = process.env.REACT_APP_API_BASE_URL;
+const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+
+
 
 
 const UploadFile = () => {
@@ -101,7 +103,7 @@ const UploadFile = () => {
       setStatusMessage('✅ Financial analysis complete!');
 
     } catch (err) {
-      console.error('Analysis error:', err.response ? err.response.data : err.message);
+      console.error("FULL ERROR:", JSON.stringify(err.response?.data || err, null, 2));
       setAnalysisResult({ error: err.response?.data?.message || err.message });
       setStatusMessage(`❌ Analysis failed: ${err.response?.data?.message || err.message}.`);
     } finally {
