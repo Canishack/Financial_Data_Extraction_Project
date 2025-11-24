@@ -72,26 +72,17 @@ input:focus::placeholder {
   color: transparent;
 }
 .todo {
-
   color: #0ff;
   font-weight: bold;
   font-size: 22px;
   font-family: 'Courier New', monospace;
-  border-right: 2px solid #0ff;
   white-space: nowrap;
   overflow: hidden;
-  animation: blink-cursor 0.7s step-end infinite;
 }
 
-@keyframes blink-cursor {
-  0%, 100% {
-    border-color: transparent;
-  }
-  50% {
-    border-color: #0ff;
-  }
-}
 
-/* Keep existing styles for .links, input, ul, etc. */
+
+
+
 
 

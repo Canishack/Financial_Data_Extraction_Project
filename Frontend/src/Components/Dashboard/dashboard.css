@@ -1,0 +1,83 @@
+
+.dashboard {
+  padding: 26px;
+  min-height: 100vh;
+  background: #071018;
+  color: #d9f0f7;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.dashboard-title { color: #9df9ef; margin: 0; font-size: 22px; }
+
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.metric-card {
+  background: #0b1116;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(45, 60, 70, 0.24);
+}
+.metric-title { color: #94a3b8; font-size: 13px; }
+.metric-value { font-size: 20px; font-weight: 700; color: #e6f9f3; }
+
+.json-and-charts { display: flex; align-items: flex-start; gap: 18px; }
+
+
+.json-pane {
+  width: 360px;
+  min-width: 320px;
+}
+.extracted-json-box {
+  padding: 12px;
+  border-radius: 12px;
+  background: #02070c;
+  border: 1px solid rgba(4, 200, 170, 0.06);
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+
+.charts-pane { flex: 1; min-width: 620px; }
+.chart-box {
+  width: 100%;
+  background: #071018;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+.chart-box.wide { width: 100%; }
+.chart-title { margin: 0 0 12px; font-size: 14px; font-weight: 700; color: #bfe9e0; }
+
+
+.json-pane .json-pane-year-row,
+.json-pane .json-year-row,
+.extracted-json-box .json-pane-year-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.01);
+  margin-bottom: 10px;
+}
+.json-pane .json-year { font-weight: 700; color: #bfe9e0; }
+
+
+.financial-popup-container { width: 100%; max-width: 900px; margin: 0 auto; }
+.financial-popup-content { max-height: 520px; overflow-y: auto; transition: max-height .25s ease; }
+
+
+.no-chart-msg { padding: 18px; color: #cbd5e1; background: rgba(255,255,255,0.01); border-radius: 8px; }
+.insights-box { margin-top: 16px; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid rgba(40,70,80,0.06); color: #dbeef1; }

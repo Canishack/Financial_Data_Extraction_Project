@@ -9,9 +9,6 @@ body {
   background: #474747;
   color: #eee;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
   padding: 20px;
 }
 
@@ -344,4 +341,37 @@ body {
   .copy-button, .analyze-button {
     min-width: unset;
   }
+}
+
+
+
+/* Resizable analysis panel (A2) */
+.extracted-json-wrapper {
+  width: 100%;
+}
+
+.analysis-panel {
+  background: #071018;
+  border-radius: 10px;
+  border: 1px solid rgba(40,120,110,0.06);
+  padding: 10px;
+  min-height: 180px;
+  max-height: 600px;    /* reasonable max */
+  overflow: auto;
+  resize: vertical;     /* this enables bottom-edge resizing */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* Keep visualize button visible */
+.visualize-button {
+  margin-top: 12px;
+}
+
+/* scrollbar styles for panel */
+.analysis-panel::-webkit-scrollbar {
+  height: 10px; width: 10px;
+}
+.analysis-panel::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 8px;
 }

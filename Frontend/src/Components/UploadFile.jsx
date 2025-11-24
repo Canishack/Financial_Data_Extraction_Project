@@ -1,20 +1,19 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './UploadFile.css';
-
+import { useNavigate } from 'react-router-dom';
+import JsonPrettyDisplay from './Dashboard/JsonPrettyDisplay';
 
 const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 
-
-
-
-const UploadFile = () => {
+const UploadFile = ({ setExtractedData }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [statusMessage, setStatusMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentTextContent, setCurrentTextContent] = useState('');
   const [analysisResult, setAnalysisResult] = useState(null);
   const textEditorRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -40,41 +39,28 @@ const UploadFile = () => {
     setStatusMessage('⏳ Processing content...');
     setAnalysisResult(null);
 
-    let textForLLM = '';
-
     try {
       if (selectedFile) {
         setStatusMessage('⏳ Uploading file and performing OCR...');
         const formData = new FormData();
         formData.append('file', selectedFile);
 
-        // --- CHANGE 1: Switched to a relative URL ---
         const res = await axios.post(`${API_BASE}/api/upload`, formData, {
-  headers: { 'Content-Type': 'multipart/form-data' },
-});
-        
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
 
-        console.log('Backend response (Upload + OCR):', res.data);
-        if (res.data.extractedText) {
-          textForLLM = res.data.extractedText;
-          setCurrentTextContent(textForLLM);
-          setStatusMessage(`✅ File uploaded and text extracted successfully!`);
-        } else {
-          setCurrentTextContent('No text could be extracted from the document.');
-          setStatusMessage(`⚠️ File uploaded, but no text extracted or an issue occurred.`);
-        }
-      } else if (currentTextContent) {
-        textForLLM = currentTextContent;
-        setStatusMessage(`✅ Article text ready for analysis!`);
+        const extracted = res.data.extractedText || '';
+        setCurrentTextContent(extracted);
+        setStatusMessage(extracted ? '✅ File uploaded and text extracted!' : '⚠️ Uploaded but no text extracted.');
+
+      } else {
+        setStatusMessage('✅ Article text ready for analysis!');
       }
 
-      if (textForLLM && textEditorRef.current) {
-        textEditorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      if (textEditorRef.current) textEditorRef.current.scrollIntoView({ behavior: 'smooth' });
 
     } catch (err) {
-      console.error('Processing error:', err.response ? err.response.data : err.message);
-      setStatusMessage(`❌ Processing failed: ${err.response?.data?.message || err.message}.`);
+      setStatusMessage(`❌ Processing failed: ${err.response?.data?.message || err.message}`);
       setCurrentTextContent('');
     } finally {
       setIsProcessing(false);
@@ -92,20 +78,17 @@ const UploadFile = () => {
     setAnalysisResult(null);
 
     try {
-      // --- CHANGE 2: Switched to a relative URL ---
       const res = await axios.post(`${API_BASE}/api/analyze`, {
-  articleText: currentTextContent,
-});
+        articleText: currentTextContent,
+      });
 
-
-      console.log('LLM Analysis response:', res.data);
       setAnalysisResult(res.data);
-      setStatusMessage('✅ Financial analysis complete!');
+      setExtractedData(res.data);
+      setStatusMessage('✅ Analysis complete! Scroll down and click Visualize.');
 
     } catch (err) {
-      console.error("FULL ERROR:", JSON.stringify(err.response?.data || err, null, 2));
+      setStatusMessage(`❌ Analysis failed: ${err.response?.data?.message || err.message}`);
       setAnalysisResult({ error: err.response?.data?.message || err.message });
-      setStatusMessage(`❌ Analysis failed: ${err.response?.data?.message || err.message}.`);
     } finally {
       setIsProcessing(false);
     }
@@ -120,93 +103,81 @@ const UploadFile = () => {
     }
   };
 
+  const goToDashboard = () => {
+    if (!analysisResult) {
+      setStatusMessage('⚠️ Run Analyze before visualizing.');
+      return;
+    }
+    navigate('/dashboard');
+  };
+
   return (
     <div className="main-content-wrapper">
       <div className="input-column">
         <div className="upload-container">
           <h2 className="upload-title">📄 Upload Financial Document</h2>
-
           <div className="button-group">
             <label className="glow-button file-label">
               Choose File
               <input type="file" onChange={handleFileChange} accept=".pdf,.png,.jpg,.jpeg,.txt" className="hidden-input" />
             </label>
 
-            <button
-              className="glow-button"
-              onClick={handleProcessInput}
-              disabled={isProcessing || (!selectedFile && !currentTextContent)}
-            >
+            <button className="glow-button" onClick={handleProcessInput} disabled={isProcessing || (!selectedFile && !currentTextContent)}>
               {isProcessing ? 'Processing...' : 'Process Content'}
             </button>
           </div>
 
-          {selectedFile && (
-            <p className="selected-file">
-              📎 Selected File: <strong>{selectedFile.name}</strong>
-            </p>
-          )}
+          {selectedFile && <p className="selected-file">📎 Selected File: <strong>{selectedFile.name}</strong></p>}
         </div>
 
         <div className="text-editor-section">
-          <h3 className="text-editor-title">📝 Article Text Editor:</h3>
-          <textarea
-            ref={textEditorRef}
-            className="text-editor-area"
-            value={currentTextContent}
-            onChange={handleTextEditorChange}
-            placeholder="Paste your financial article text here, or upload a file to populate this editor..."
-          ></textarea>
-          <p className="scroll-hint">Scroll to view full text. You can edit this text before processing.</p>
+          <h3 className="text-editor-title">📝 Article Text Editor</h3>
+          <textarea ref={textEditorRef} className="text-editor-area" value={currentTextContent} onChange={handleTextEditorChange} placeholder="Paste financial article text here..." />
           <div className="editor-buttons">
-            <button className="glow-button copy-button" onClick={handleCopyText}>
-              Copy Text
-            </button>
-            <button
-              className="glow-button analyze-button"
-              onClick={handleAnalyzeText}
-              disabled={isProcessing || !currentTextContent}
-            >
-              {isProcessing ? 'Analyzing...' : 'Analyze Text'}
+            <button className="glow-button copy-button" onClick={handleCopyText}>Copy</button>
+            <button className="glow-button analyze-button" onClick={handleAnalyzeText} disabled={isProcessing || !currentTextContent}>
+              {isProcessing ? 'Analyzing...' : 'Analyze'}
             </button>
           </div>
         </div>
 
-        {statusMessage && (
-          <p className={`status-message ${statusMessage.startsWith('✅') ? 'success' : statusMessage.startsWith('⏳') ? 'pending' : 'error'}`}>
-            {statusMessage}
-          </p>
-        )}
+        {statusMessage && <p className={`status-message ${statusMessage.startsWith('✅') ? 'success' : statusMessage.startsWith('⏳') ? 'pending' : 'error'}`}>{statusMessage}</p>}
       </div>
 
       <div className="output-column">
-        {analysisResult && typeof analysisResult === 'object' && !analysisResult.error ? (
-          <div className="extracted-json-box">
-            <h3 className="extracted-json-title">📊 Financial Analysis Result:</h3>
-            <div className="analysis-data-display">
-              {Object.entries(analysisResult).map(([key, value]) => (
-                <div key={key} className="data-row">
-                  <span className="data-label">{key}:</span>
-                  <span className="data-value">{String(value)}</span>
-                </div>
-              ))}
+        {analysisResult && !analysisResult.error ? (
+          <div className="extracted-json-wrapper">
+            <h3 className="extracted-json-title">📊 Financial Analysis Result</h3>
+
+        
+            <div
+              className="analysis-panel"
+              title="Drag bottom edge to resize. Scroll inside if content is long."
+              role="region"
+              aria-label="Financial analysis result"
+            >
+           <JsonPrettyDisplay data={analysisResult} currencyFormatter={(v)=>String(v)} />
+
             </div>
+
+            <button className="glow-button visualize-button" onClick={goToDashboard} style={{ marginTop: 14, width: "100%", fontSize: 15 }}>
+              Visualize →
+            </button>
           </div>
         ) : analysisResult && analysisResult.error ? (
           <div className="extracted-json-box error-box">
-            <h3 className="extracted-json-title">⚠️ Analysis Error:</h3>
+            <h3 className="extracted-json-title">⚠️ Analysis Error</h3>
             <p className="error-message">{analysisResult.error}</p>
           </div>
-        ) : !isProcessing && (
+        ) : !isProcessing ? (
           <div className="placeholder-box">
-            <p>Your financial analysis results will appear here.</p>
-            <p>Upload a document or paste text on the left to get started!</p>
+            <p>Your analysis will appear here.</p>
+            <p>Upload a file or paste text to begin.</p>
           </div>
-        )}
-        {isProcessing && (
+        ) : (
           <div className="placeholder-box">
             <p>Processing your document...</p>
-            <div className="loading-spinner"></div>
+            <div className="loading-spinner" />
           </div>
         )}
       </div>
@@ -215,4 +186,3 @@ const UploadFile = () => {
 };
 
 export default UploadFile;
-
