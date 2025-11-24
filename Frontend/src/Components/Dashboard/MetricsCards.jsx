@@ -1,8 +1,4 @@
-import React from "react";
-
 export default function MetricsCards({ metrics = {}, currencySym = "$" }) {
-  const fmt = (v, unit) => (v === null || v === undefined) ? "-" : `${currencySym}${typeof v === "number" || !isNaN(Number(v)) ? Number(v).toLocaleString() : v} ${unit || ""}`;
-
   return (
     <div className="metrics-grid">
       <div className="metric-card">

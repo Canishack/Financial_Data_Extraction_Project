@@ -1,4 +1,3 @@
-import React, { useMemo } from "react";
 import RevenueLineChart from "./RevenueLineChart";
 import ProfitLineChart from "./ProfitLineChart";
 import RevenueProfitBar from "./RevenueProfitBar";
