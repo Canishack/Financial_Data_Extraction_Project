@@ -1,4 +1,4 @@
-# 📊 Financial Data Extraction & Analysis Tool  
+# 📊 Financial Data Intelligence System  
 
 > An intelligent web application to **extract and analyze key financial data** from documents and text.  
 This tool combines **OCR + Generative AI** to transform **unstructured financial reports, invoices, and articles** into **structured, actionable insights**.  
