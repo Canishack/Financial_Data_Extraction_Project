@@ -1,4 +1,4 @@
-/* Reset default browser styles */
+
 html, body, #root {
   margin: 0;
   padding: 0;
@@ -11,23 +11,20 @@ html, body, #root {
 }
 
 body {
-  background-color: #0d0d0f; /* A dark background for the whole page */
+  background-color: #0d0d0f; 
   color: white;
 }
 
-/* This is the key to the solution for page scrolling.
-  It makes the app container a flex column, allowing the main content
-  to grow and push the boundaries, which enables scrolling.
-*/
+
 .App {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* At least the full height of the screen */
+  min-height: 100vh; 
 }
 
-/* This makes sure the content area below the navbar can grow */
+
 .main-content {
-  flex-grow: 1; /* Allows this element to expand */
+  flex-grow: 1; 
   display: flex;
   flex-direction: column;
 }
