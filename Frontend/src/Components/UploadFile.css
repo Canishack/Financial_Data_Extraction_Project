@@ -6,6 +6,7 @@ w* {
 }
 
 body {
+  
   background: #474747;
   color: #eee;
   min-height: 100vh;
@@ -13,6 +14,7 @@ body {
 }
 
 .main-content-wrapper {
+  
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;

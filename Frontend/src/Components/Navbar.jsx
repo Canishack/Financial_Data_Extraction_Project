@@ -30,9 +30,7 @@ const Navbar = ({ title }) => {
         <li className="links"><Link to="/about">About</Link></li>
         <li className="links"><Link to="/contact">Contact-us</Link></li>
 
-        <li>
-          <input type="search" placeholder="Search..." />
-        </li>
+
       </ul>
     </div>
   );
